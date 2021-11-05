@@ -1,0 +1,9 @@
+data/2015.csv filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/2015_eol_medpar_state.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/2015_med_discharges_state.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/2015_mortality_state.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/2015_surg_discharges_state.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/pa_reimb_county_2015.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/PC_County_rates_2015.xls filter=lfs diff=lfs merge=lfs -text
+data/dartmouth_health_atlas/post_discharge_events_county_15.xls filter=lfs diff=lfs merge=lfs -text
+data/NEHRS_2008-2017.csv filter=lfs diff=lfs merge=lfs -text
