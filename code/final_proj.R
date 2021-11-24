@@ -23,8 +23,22 @@ brfss_data <- brfss_data %>% mutate(IYEAR = str_extract(as.character(.$IYEAR), '
 brfss_data <- filter(brfss_data, !((!is.na(CELLFON3)& CELLFON3 == 2)| (!is.na(CELLFON2) & CELLFON2 == 2)))
 #excluding observations that do not reside in the sate where they are answer they are.
 brfss_data <- filter(brfss_data, is.na(CSTATE) | CSTATE !=2)
-
+#creates a list of proportion tables for each of the 
+#predictor variabels 
+prop_var_list <- c('NUMADULT', 'NUMMEN', 'NUMWOMEN', 'PVTRESD2', 'CCLGHOUS', 'HHADULT', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'CHILDREN', 'INCOME2', 'WEIGHT2', 'PREGNANT', 'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT', 'TRNSGNDR', 'MSCODE')
+prop_table <- brfss_data %>% select(prop_var_list)
+list_of_prop_tables <- list()
+#i know theres a better way to do it than this but this felt the easiest 
+j <- 0 
+for (i in prop_table){
+  j= j+1
+  test <- table(i)
+  list_of_prop_tables[[j]] <- prop.table(test)
+}
+names(list_of_prop_tables) <- names(prop_table)
+rm(prop_table)
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data, nehrs_data, by = 'fips')
+
 rm(brfss_data)
 rm(nehrs_data)
