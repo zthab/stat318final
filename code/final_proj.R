@@ -38,14 +38,14 @@ brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'CHECKUP1CLEAN', 'NUMAD
 
 #creates a list of proportion tables for each of the 
 #predictor variabels 
-prop_var_list <- c('NUMADULT', 'NUMMEN', 'NUMWOMEN', 'PVTRESD2', 'CCLGHOUS', 'HHADULT', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'CHILDREN', 'INCOME2', 'WEIGHT2', 'PREGNANT', 'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT', 'TRNSGNDR', 'MSCODE')
+prop_var_list <- c('NUMADULT', 'NUMMEN', 'NUMWOMEN', 'PVTRESD2', 'CCLGHOUS', 'HHADULT', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1','CHILDREN', 'INCOME2', 'WEIGHT2', 'PREGNANT', 'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT', 'TRNSGNDR', 'MSCODE')
 prop_table <- brfss_data %>% select(prop_var_list)
 list_of_prop_tables <- list()
 #i know theres a better way to do it than this but this felt the easiest 
 j <- 0 
 for (i in prop_table){
   j= j+1
-  test <- table(i)
+  test <- table(i, useNA = "always")
   list_of_prop_tables[[j]] <- prop.table(test)
 }
 names(list_of_prop_tables) <- names(prop_table)
