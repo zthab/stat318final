@@ -37,8 +37,11 @@ brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR <= 4 & brfss_data$CHECKUP1 > 2 &
                            brfss_data$CHECKUP1 < 9] <- 0
 brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR > 4 & brfss_data$X_AGEG5YR < 14 & 
                            brfss_data$CHECKUP1 > 1 &  brfss_data$CHECKUP1 < 9] <- 0
-brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9 #people who refused to provide check up information
+brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9
+brfss_data$LANDLINE<-0
+brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1#people who refused to provide check up information
 sum(is.na(brfss_data$CHECKUP1CLEAN)) #32476 missing/refused to provide age
+
 
 # cut down variables (saves as new var called brfss_data_f)
 brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
@@ -50,22 +53,31 @@ brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN'
                                              'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT',
                                              'TRNSGNDR', 'MSCODE','X_PRACE1',
                                              'X_HISPANC','HLTHPLN1','INTERNET',
-                                             'EXERANY2','X_SMOKER3'))
+                                             'EXERANY2','X_SMOKER3', 'LANDLINE'))
 
 #creates a list of proportion tables for each of the 
 #predictor variabels 
-prop_var_list <- colnames(brfss_data_f)
-prop_table <- brfss_data %>% select(prop_var_list)
-list_of_prop_tables <- list()
+prop_tables <- list()
 #i know theres a better way to do it than this but this felt the easiest 
 j <- 0 
-for (i in prop_table){
+for (i in brfss_data_f){
   j= j+1
   temp_prop <- table(i, useNA = "always")
-  list_of_prop_tables[[j]] <- prop.table(temp_prop)
+  prop_tables[[j]] <- prop.table(temp_prop)
 }
-names(list_of_prop_tables) <- names(prop_table)
-rm(prop_table)
+names(prop_tables) <- names(brfss_data_f)
+rm(temp_prop)
+
+#crosstabs by landline/cellphone
+cross_tables <- list()
+#i know theres a better way to do it than this but this felt the easiest 
+j <- 0 
+for (i in brfss_data_f){
+  j= j+1
+  temp_prop <- table(i,brfss_data_f$LANDLINE, useNA = "always")
+  cross_tables[[j]] <- prop.table(temp_prop)
+}
+names(cross_tables) <- names(brfss_data_f)
 rm(temp_prop)
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data, nehrs_data, by = 'fips')
