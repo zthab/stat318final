@@ -40,13 +40,18 @@ brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR > 4 & brfss_data$X_AGEG5YR < 14 &
 brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9
 brfss_data$LANDLINE<-0
 brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1#people who refused to provide check up information
-sum(is.na(brfss_data$CHECKUP1CLEAN)) #32476 missing/refused to provide age
+sum(is.na(brfss_data$CHECKUP1CLEAN)) #3476 missing/refused to provide age
 
+# combines cell and landline (NUMADULT)
+brfss_data$NUMADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)] <- 
+  brfss_data$HHADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)]
 
-# cut down variables (saves as new var called brfss_data_f)
+# combines cell and landline (COLGHOUS)
+brfss_data$COLGHOUS[brfss_data$CCLGHOUS == 1] <- 1
+
+# cuts down variables (saves as new var called brfss_data_f)
 brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
-                                             'NUMADULT', 'NUMMEN', 'NUMWOMEN', 
-                                             'PVTRESD2', 'CCLGHOUS', 'HHADULT', 
+                                             'NUMADULT', 'PVTRESD2', 'COLGHOUS', 
                                              'SEX', 'MARITAL', 'EDUCA', 
                                              'RENTHOM1', 'VETERAN3', 'CHILDREN',
                                              'INCOME2', 'WEIGHT2', 'PREGNANT', 
