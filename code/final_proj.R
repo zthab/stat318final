@@ -49,9 +49,12 @@ brfss_data$NUMADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)] <-
 # combines cell and landline (COLGHOUS)
 brfss_data$COLGHOUS[brfss_data$CCLGHOUS == 1] <- 1
 
+# combines cell and landline (PVTRESD1)
+brfss_data$PVTRESD1[!is.na(brfss_data$PVTRESD2)] <- brfss_data$PVTRESD2[!is.na(brfss_data$PVTRESD2)]
+
 # cuts down variables (saves as new var called brfss_data_f)
 brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
-                                             'NUMADULT', 'PVTRESD2', 'COLGHOUS', 
+                                             'NUMADULT', 'PVTRESD1', 
                                              'SEX', 'MARITAL', 'EDUCA', 
                                              'RENTHOM1', 'VETERAN3', 'CHILDREN',
                                              'INCOME2', 'WEIGHT2', 'PREGNANT', 
