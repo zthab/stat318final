@@ -55,9 +55,6 @@ sum(is.na(brfss_data$CHECKUP1CLEAN)) #3476 missing/refused to provide age
 brfss_data$NUMADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)] <- 
   brfss_data$HHADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)]
 
-# combines cell and landline (COLGHOUS)
-brfss_data$COLGHOUS[brfss_data$CCLGHOUS == 1] <- 1
-
 # combines cell and landline (PVTRESD1)
 brfss_data$PVTRESD1[!is.na(brfss_data$PVTRESD2)] <- brfss_data$PVTRESD2[!is.na(brfss_data$PVTRESD2)]
 
@@ -69,7 +66,7 @@ brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN'
                                              'NUMADULT', 'PVTRESD1', 
                                              'SEX', 'MARITAL', 'EDUCA', 
                                              'RENTHOM1', 'VETERAN3', 'CHILDREN',
-                                             'INCOME2', 'WEIGHT2', 'PREGNANT', 
+                                             'INCOME2', 'X_BMI5', 'PREGNANT', 
                                              'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT',
                                              'TRNSGNDR', 'MSCODE','X_PRACE1',
                                              'X_HISPANC','HLTHPLN1','INTERNET',
