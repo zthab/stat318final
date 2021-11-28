@@ -38,8 +38,14 @@ brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR <= 4 & brfss_data$CHECKUP1 > 2 &
 brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR > 4 & brfss_data$X_AGEG5YR < 14 & 
                            brfss_data$CHECKUP1 > 1 &  brfss_data$CHECKUP1 < 9] <- 0
 brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9
+#creates landline variable
 brfss_data$LANDLINE<-0
-brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1#people who refused to provide check up information
+brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
+#codes men, people older than 44 as non pregnant
+brfss_data$PREGNANT[brfss_data$AGE>44|brfss_data$SEX ==1] <- 2
+#codes those who dont work as having worked 0 hours
+brfss_data$SCNTWRK1[brfss_data$EMPLOY1 %in% 3:8]<- 98 
+#people who refused to provide check up information
 sum(is.na(brfss_data$CHECKUP1CLEAN)) #32476 missing/refused to provide age
 
 
