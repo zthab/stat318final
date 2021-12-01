@@ -8,8 +8,9 @@ fips_data <- read.csv(here('data', 'us-state-ansi-fips.csv'),
                       stringsAsFactors = F)
 
 #limiting data from NEHRS to 2015, and adding fips code for merge
-nehrs_data <- nehrs_data %>% filter(period == 2015,) %>% 
+nehrs_data <- nehrs_data %>% filter(period == 2015 & region != 'National',) %>% 
   left_join(fips_data, by = c('region', 'region_code'))
+nehrs_data <- nehrs_data[,colSums(is.na(nehrs_data))<nrow(nehrs_data)]
 rm(fips_data)
 
 #excluding Guam, Puerto Rico from BRFSS data since 
@@ -97,7 +98,7 @@ for (i in brfss_data_f){
 names(cross_tables) <- names(brfss_data_f)
 rm(temp_prop)
 #when we are ready to merge both the nehrs and the BRFSS 
-full_data <- left_join(brfss_data, nehrs_data, by = 'fips')
+full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
 
 rm(brfss_data)
 rm(nehrs_data)
