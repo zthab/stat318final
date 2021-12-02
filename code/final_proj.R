@@ -35,6 +35,9 @@ brfss_data <- filter(brfss_data, !((!is.na(CELLFON3)& CELLFON3 == 2)|
 #excluding observations that do not reside in the sate where they are answer they are.
 brfss_data <- filter(brfss_data, is.na(CSTATE) | CSTATE !=2)
 
+#excluding observations that do not have _RFHLTH
+brfss_data <- filter(brfss_data, X_RFHLTH != 9)
+
 #creates new predictor variable for checkup1
 brfss_data$CHECKUP1CLEAN <- rep(NA, nrow(brfss_data))
 brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR <= 4 & brfss_data$CHECKUP1 <= 2 ] <- 1
@@ -45,6 +48,11 @@ brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR <= 4 & brfss_data$CHECKUP1 > 2 &
 brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR > 4 & brfss_data$X_AGEG5YR < 14 & 
                            brfss_data$CHECKUP1 > 1 &  brfss_data$CHECKUP1 < 9] <- 0
 brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9
+brfss_data$CHECKUP1CLEAN[is.na(brfss_data$CHECKUP1CLEAN)] <- 9
+
+#excluding observations that do not have CHECKUP1CLEAN
+brfss_data <- filter(brfss_data,  CHECKUP1CLEAN != 9)
+
 #creates landline variable
 brfss_data$LANDLINE<-0
 brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
