@@ -73,9 +73,22 @@ brfss_data$NUMADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)] <-
 # combines cell and landline (PVTRESD1)
 brfss_data$PVTRESD1[!is.na(brfss_data$PVTRESD2)] <- brfss_data$PVTRESD2[!is.na(brfss_data$PVTRESD2)]
 
+# sets missing to NA
+brfss_data$MARITAL[brfss_data$MARITAL == 9] <- NA
+brfss_data$MARITAL <- as.factor(brfss_data$MARITAL)
+
+brfss_data$EDUCA[brfss_data$EDUCA == 9] <- NA
+brfss_data$EDUCA <- as.factor(brfss_data$EDUCA)
+
+brfss_data$RENTHOM1[brfss_data$RENTHOM1 == 7 |brfss_data$RENTHOM1== 9] <- NA
+brfss_data$RENTHOM1 <- as.factor(brfss_data$RENTHOM1)
+
+brfss_data$VETERAN3[brfss_data$VETERAN3 == 2] <- 0
+brfss_data$VETERAN3[brfss_data$VETERAN3 == 7 |brfss_data$VETERAN3== 9] <- NA
+brfss_data$VETERAN3 <- as.factor(brfss_data$VETERAN3)
+
 brfss_data$LANDLINE<-0
 brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
-
 
 brfss_data$EMPLOY1[brfss_data$EMPLOY1 == 9] <- NA
 brfss_data$EMPLOY1 <- as.factor(brfss_data$EMPLOY1)
@@ -168,7 +181,7 @@ brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEA
 ##############################
 
 ### (Cindy start list here)
-meth_list <- c('')
+meth_list <- c('polr', '', 'polyreg', 'polr', 'polyreg', 'logreg')
 
 meth_list <- append(meth_list, c('polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') )
 imp <- mice(brfss_data_f, method = meth_list)
