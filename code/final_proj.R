@@ -23,7 +23,7 @@ rm(fips_data)
 #excluding Guam, Puerto Rico from BRFSS data since 
 #is not present in NEHRS data 
 brfss_data <- brfss_data %>% rename(fips = X_STATE) %>% filter((fips != 66 & 
-                                                                 fips != 72)) 
+                                                                 fips != 72)|is.na(fips)) 
 brfss_data$fips <- as.factor(brfss_data$fips)
 #excluding survey observations made in 2015
 brfss_data <- brfss_data %>% mutate(IYEAR = str_extract(as.character(.$IYEAR), 
@@ -64,10 +64,8 @@ brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
 brfss_data$PREGNANT[brfss_data$AGE>44|brfss_data$SEX ==1] <- 2
 #codes those who dont work as having worked 0 hours
 brfss_data$SCNTWRK1[brfss_data$EMPLOY1 %in% 3:8]<- 98 
-#people who refused to provide check up information
-sum(is.na(brfss_data$CHECKUP1CLEAN)) #32476 missing/refused to provide age
-brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1#people who refused to provide check up information
-sum(is.na(brfss_data$CHECKUP1CLEAN)) #3476 missing/refused to provide age
+
+brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
 
 
 # combines cell and landline (NUMADULT)
@@ -113,7 +111,7 @@ brfss_data$SCNTWRK1[brfss_data$SCNTWRK1 == 97 |
 
 brfss_data$X_PRACE1[brfss_data$X_PRACE1==77 | 
                       brfss_data$X_PRACE1 == 99] <- NA
-brfss_data <- filter(X_PRACE1 != 8)
+brfss_data <- filter(brfss_data,X_PRACE1 != 8|is.na(X_PRACE1))
 brfss_data$X_PRACE1 <- as.factor(brfss_data$X_PRACE1)
 brfss_data$X_HISPANC[brfss_data$X_HISPANC == 9] <- NA
 brfss_data$X_HISPANC <- as.factor(brfss_data$X_HISPANC)
