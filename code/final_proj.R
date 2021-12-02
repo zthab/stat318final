@@ -1,6 +1,7 @@
 library(here)
 library(tidyverse)
 library(dplyr)
+library(mice)
 #Load in data
 brfss_data <- read.csv(here('data','2015.csv') )
 nehrs_data <- read.csv(here('data', 'NEHRS_2008-2017.csv'))
@@ -62,16 +63,9 @@ brfss_data$PVTRESD1[!is.na(brfss_data$PVTRESD2)] <- brfss_data$PVTRESD2[!is.na(b
 brfss_data$LANDLINE<-0
 brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
 
+
 # cuts down variables (saves as new var called brfss_data_f)
-brfss_data_f = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
-                                             'NUMADULT', 'PVTRESD1', 
-                                             'SEX', 'MARITAL', 'EDUCA', 
-                                             'RENTHOM1', 'VETERAN3', 'CHILDREN',
-                                             'INCOME2', 'X_BMI5', 'PREGNANT', 
-                                             'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT',
-                                             'TRNSGNDR', 'MSCODE','X_PRACE1',
-                                             'X_HISPANC','HLTHPLN1','INTERNET',
-                                             'EXERANY2','X_SMOKER3', 'LANDLINE'))
+brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3','EMPLOY1','CHILDREN',  'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT', 'TRNSGNDR', 'MSCODE','X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
 
 #creates a list of proportion tables for each of the 
 #predictor variabels 
@@ -97,6 +91,31 @@ for (i in brfss_data_f){
 }
 names(cross_tables) <- names(brfss_data_f)
 rm(temp_prop)
+
+brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'WEIGHT', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
+#cuts down variables post checking for too much missingness
+#variable trimming for imputation
+brfss_data$EMPLOY1[brfss_data$EMPLOY1 == 9] <- NA
+brfss_data$EMPLOY1 <- as.factor(brfss_data$EMPLOY1)
+test <- mice(brfss_data, method = "poly.reg", m = 1)
+brfss_data$CHILDREN[brfss_data$CHILDREN == 99] <- NA
+brfss_data$CHILDREN[brfss_data$CHILDREN == 88] <- 0
+
+brfss_data$INCOME2[brfss_data$INCOME2 == 77 | 
+                     brfss_data$INCOME2 == 99] <- NA
+brfss_data$INCOME2 <- as.Factor(brfss_data$INCOME2)
+
+brfss_data$WEIGHT2[brfss_data$WEIGHT2== 9999] <- NA
+#converts kg reported to pounds
+brfss_data$WEIGHT2[brfss_data$WEIGHT2>=9000] <- (brfss_data$WEIGHT2-9000)*2.205
+
+### (Cindy start list here)
+meth_list <- c('')
+
+imp <- mice(brfss_data, method = meth_list)
+
+
+brfss_data$PREGNANT[brfss_data$PREGNANT]
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
 
