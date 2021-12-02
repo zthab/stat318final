@@ -17,6 +17,7 @@ fips_data <- read.csv(here('data', 'us-state-ansi-fips.csv'),
 nehrs_data <- nehrs_data %>% filter(period == 2015 & region != 'National',) %>% 
   left_join(fips_data, by = c('region', 'region_code'))
 nehrs_data <- nehrs_data[,colSums(is.na(nehrs_data))<nrow(nehrs_data)]
+nehrs_data <- select(nehrs_data, -region, -region_code, -period)
 rm(fips_data)
 
 #excluding Guam, Puerto Rico from BRFSS data since 
@@ -51,9 +52,10 @@ brfss_data$CHECKUP1CLEAN[brfss_data$X_AGEG5YR > 4 & brfss_data$X_AGEG5YR < 14 &
                            brfss_data$CHECKUP1 > 1 &  brfss_data$CHECKUP1 < 9] <- 0
 brfss_data$CHECKUP1CLEAN[brfss_data$CHECKUP1 == 9] <- 9
 brfss_data$CHECKUP1CLEAN[is.na(brfss_data$CHECKUP1CLEAN)] <- 9
-brfss_data$CHECKUP1CLEAN <- as.factor(brfss_data$CHECKUP1CLEAN)
 #excluding observations that do not have CHECKUP1CLEAN
 brfss_data <- filter(brfss_data,  CHECKUP1CLEAN != 9)
+
+brfss_data$CHECKUP1CLEAN <- as.factor(brfss_data$CHECKUP1CLEAN)
 
 #creates landline variable
 brfss_data$LANDLINE<-0
@@ -74,7 +76,7 @@ brfss_data$NUMADULT[brfss_data$HHADULT < 76 & !is.na(brfss_data$HHADULT)] <-
 
 # combines cell and landline (PVTRESD1)
 brfss_data$PVTRESD1[!is.na(brfss_data$PVTRESD2)] <- brfss_data$PVTRESD2[!is.na(brfss_data$PVTRESD2)]
-brfss_data$PVTRESD1 <- as.factor(PVTRESD1)
+brfss_data$PVTRESD1 <- as.factor(brfss_data$PVTRESD1)
 # sets missing to NA
 brfss_data$MARITAL[brfss_data$MARITAL == 9] <- NA
 brfss_data$MARITAL <- as.factor(brfss_data$MARITAL)
@@ -111,8 +113,8 @@ brfss_data$SCNTWRK1[brfss_data$SCNTWRK1 == 97 |
 
 brfss_data$X_PRACE1[brfss_data$X_PRACE1==77 | 
                       brfss_data$X_PRACE1 == 99] <- NA
+brfss_data <- filter(X_PRACE1 != 8)
 brfss_data$X_PRACE1 <- as.factor(brfss_data$X_PRACE1)
-
 brfss_data$X_HISPANC[brfss_data$X_HISPANC == 9] <- NA
 brfss_data$X_HISPANC <- as.factor(brfss_data$X_HISPANC)
 
@@ -181,11 +183,14 @@ rm(temp_prop)
 
 brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3'))
 
-meth_list <- c('','', '', 'norm.nob', '', '', 'polyreg', 'polr', 'polyreg', 'logreg','polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') 
-imp <- mice(brfss_data_f, method = meth_list, m=1)
 
+meth_list <- c('','', '', 'norm.nob', '', '', 'polyreg', 'polr', 'polyreg', 'logreg','polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') 
+imp1 <- mice(brfss_data_f, method = meth_list, m=1)
+
+nehrs_data$fips <- as.factor(nehrs_data$fips)
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
+
 
 rm(brfss_data)
 rm(nehrs_data)
