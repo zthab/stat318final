@@ -8,6 +8,11 @@ nehrs_data <- read.csv(here('data', 'NEHRS_2008-2017.csv'))
 fips_data <- read.csv(here('data', 'us-state-ansi-fips.csv'),
                       stringsAsFactors = F)
 
+
+##############################
+#Data cleaning
+##############################
+
 #limiting data from NEHRS to 2015, and adding fips code for merge
 nehrs_data <- nehrs_data %>% filter(period == 2015 & region != 'National',) %>% 
   left_join(fips_data, by = c('region', 'region_code'))
@@ -64,8 +69,36 @@ brfss_data$LANDLINE<-0
 brfss_data$LANDLINE[brfss_data$QSTVER<=13] <- 1
 
 
+brfss_data$EMPLOY1[brfss_data$EMPLOY1 == 9] <- NA
+brfss_data$EMPLOY1 <- as.factor(brfss_data$EMPLOY1)
+
+brfss_data$CHILDREN[brfss_data$CHILDREN == 99] <- NA
+brfss_data$CHILDREN[brfss_data$CHILDREN == 88] <- 0
+
+brfss_data$INCOME2[brfss_data$INCOME2 == 77 | 
+                     brfss_data$INCOME2 == 99] <- NA
+brfss_data$INCOME2 <- as.Factor(brfss_data$INCOME2)
+
+brfss_data$WEIGHT2[brfss_data$WEIGHT2== 9999] <- NA
+#converts kg reported to pounds
+brfss_data$WEIGHT2[brfss_data$WEIGHT2>=9000] <- (brfss_data$WEIGHT2-9000)*2.205
+
+
+
+##############################
+#removal of variables
+##############################
+
 # cuts down variables (saves as new var called brfss_data_f)
 brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3','EMPLOY1','CHILDREN',  'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' ,'SCNTLWK1', 'SXORIENT', 'TRNSGNDR', 'MSCODE','X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
+
+
+
+
+##############################
+#Checking missingness with proportion tables
+##############################
+
 
 #creates a list of proportion tables for each of the 
 #predictor variabels 
@@ -92,22 +125,23 @@ for (i in brfss_data_f){
 names(cross_tables) <- names(brfss_data_f)
 rm(temp_prop)
 
+
+
+##############################
+#Removing variables with many missing values
+##############################
+
+
 brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'WEIGHT', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
+
+
+
+
+##############################
+#Imputation data cleaning
+##############################
 #cuts down variables post checking for too much missingness
 #variable trimming for imputation
-brfss_data$EMPLOY1[brfss_data$EMPLOY1 == 9] <- NA
-brfss_data$EMPLOY1 <- as.factor(brfss_data$EMPLOY1)
-test <- mice(brfss_data, method = "poly.reg", m = 1)
-brfss_data$CHILDREN[brfss_data$CHILDREN == 99] <- NA
-brfss_data$CHILDREN[brfss_data$CHILDREN == 88] <- 0
-
-brfss_data$INCOME2[brfss_data$INCOME2 == 77 | 
-                     brfss_data$INCOME2 == 99] <- NA
-brfss_data$INCOME2 <- as.Factor(brfss_data$INCOME2)
-
-brfss_data$WEIGHT2[brfss_data$WEIGHT2== 9999] <- NA
-#converts kg reported to pounds
-brfss_data$WEIGHT2[brfss_data$WEIGHT2>=9000] <- (brfss_data$WEIGHT2-9000)*2.205
 
 ### (Cindy start list here)
 meth_list <- c('')
