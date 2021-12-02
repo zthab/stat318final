@@ -79,12 +79,30 @@ brfss_data$INCOME2[brfss_data$INCOME2 == 77 |
                      brfss_data$INCOME2 == 99] <- NA
 brfss_data$INCOME2 <- as.Factor(brfss_data$INCOME2)
 
-brfss_data$WEIGHT2[brfss_data$WEIGHT2== 9999] <- NA
-#converts kg reported to pounds
-brfss_data$WEIGHT2[brfss_data$WEIGHT2>=9000] <- (brfss_data$WEIGHT2-9000)*2.205
+brfss_data$PREGNANT[brfss_data$PREGNANT == 7 |brfss_data$PREGNANT== 9] <- NA
+brfss_data$PREGNANT <- as.factor(brfss_data$PREGNANT)
 
+brfss_data$SCNTWRK1[brfss_data$SCNTWRK1 == 98] <- 0
+brfss_data$SCNTWRK1[brfss_data$SCNTWRK1 == 97 |
+                      brfss_data$SCNTWRK1 == 99  ] <- NA
 
+brfss_data$X_PRACE1[brfss_data$X_PRACE1==77 | 
+                      brfss_data$X_PRACE1 == 99] <- NA
+brfss_data$X_PRACE1 <- as.factor(brfss_data$X_PRACE1)
 
+brfss_data$X_HISPANC[brfss_data$X_HISPANC == 9] <- NA
+brfss_data$X_HISPANC <- as.factor(brfss_data$X_HISPANC)
+
+brfss_data$INTERNET[brfss_data$INTERNET == 7|
+                      brfss_data$INTERNET == 9] <- NA
+brfss_data$INTERNET <- as.factor(brfss_data$INTERNET)
+
+brfss_data$EXERANY2[brfss_data$EXERANY2 == 7|
+                      brfss_data$EXERANY2 == 9] <- NA
+brfss_data$EXERANY2 <- as.factor(brfss_data$EXERANY2)
+
+brfss_data$X_SMOKER3[brfss_data$X_SMOKER3 == 9] <- NA
+brfss_data$X_SMOKER3 <- as.factor(brfss_data$X_SMOKER3)
 ##############################
 #removal of variables
 ##############################
@@ -132,7 +150,7 @@ rm(temp_prop)
 ##############################
 
 
-brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'WEIGHT', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
+brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
 
 
 
@@ -144,6 +162,7 @@ brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
 ### (Cindy start list here)
 meth_list <- c('')
 
+meth_list <- append(meth_list, c('polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') )
 imp <- mice(brfss_data, method = meth_list)
 
 
