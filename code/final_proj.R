@@ -158,7 +158,7 @@ rm(temp_prop)
 ##############################
 
 
-brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
+brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 'NUMADULT', 'PVTRESD1', 'SEX', 'MARITAL', 'EDUCA', 'RENTHOM1', 'VETERAN3', 'EMPLOY1', 'CHILDREN', 'INCOME2', 'X_BMI5', 'PREGNANT', 'SCNTWRK1' , 'X_PRACE1', 'X_HISPANC','HLTHPLN1','INTERNET','EXERANY2','X_SMOKER3', 'LANDLINE'))
 
 
 
@@ -171,10 +171,8 @@ brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
 meth_list <- c('')
 
 meth_list <- append(meth_list, c('polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') )
-imp <- mice(brfss_data, method = meth_list)
+imp <- mice(brfss_data_f, method = meth_list)
 
-
-brfss_data$PREGNANT[brfss_data$PREGNANT]
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
 
