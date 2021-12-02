@@ -138,10 +138,8 @@ brfss_data = subset(brfss_data, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEAN', 
 
 
 ##############################
-#Imputation data cleaning
+#Imputation data 
 ##############################
-#cuts down variables post checking for too much missingness
-#variable trimming for imputation
 
 ### (Cindy start list here)
 meth_list <- c('')
