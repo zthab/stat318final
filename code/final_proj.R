@@ -189,8 +189,8 @@ brfss_data_comp <- complete(imp1)
 save(brfss_data_comp, file = 'brfss_comp.rda')
 nehrs_data$fips <- as.factor(nehrs_data$fips)
 #when we are ready to merge both the nehrs and the BRFSS 
-full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
-
+full_data <- left_join(brfss_data_comp, nehrs_data, by = 'fips')
+save(full_data, file='full_comp.rda')
 
 rm(brfss_data)
 rm(nehrs_data)
