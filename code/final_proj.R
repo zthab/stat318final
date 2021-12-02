@@ -185,6 +185,8 @@ brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEA
 meth_list <- c('','', '', 'norm.nob', '', '', 'polyreg', 'polr', 'polyreg', 'logreg','polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') 
 imp1 <- mice(brfss_data_f, method = meth_list, m=1)
 
+brfss_data_comp <- complete(imp1)
+save(brfss_data_comp, file = 'brfss_comp.rda')
 nehrs_data$fips <- as.factor(nehrs_data$fips)
 #when we are ready to merge both the nehrs and the BRFSS 
 full_data <- left_join(brfss_data_f, nehrs_data, by = 'fips')
