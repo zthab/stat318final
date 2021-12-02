@@ -3,9 +3,9 @@ library(tidyverse)
 library(dplyr)
 library(mice)
 #Load in data
-brfss_data <- read.csv(here('data','2015.csv') )
-nehrs_data <- read.csv(here('data', 'NEHRS_2008-2017.csv'))
-fips_data <- read.csv(here('data', 'us-state-ansi-fips.csv'),
+brfss_data <- read.csv(here::here('data','2015.csv') )
+nehrs_data <- read.csv(here::here('data', 'NEHRS_2008-2017.csv'))
+fips_data <- read.csv(here::here('data', 'us-state-ansi-fips.csv'),
                       stringsAsFactors = F)
 
 
@@ -183,9 +183,19 @@ brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEA
 
 
 meth_list <- c('','', '', 'norm.nob', '', '', 'polyreg', 'polr', 'polyreg', 'logreg','polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') 
-imp1 <- mice(brfss_data_f, method = meth_list, m=1)
+post <- make.post(brfss_data_f)
+range(brfss_data_f$NUMADULT, na.rm=TRUE)
+range(brfss_data_f$CHILDREN, na.rm=TRUE)
+range(brfss_data_f$X_BMI5, na.rm=TRUE)
+range(brfss_data_f$SCNTWRK1, na.rm=TRUE)
+post["NUMADULT"] <- "imp[[j]][, i] <- squeeze(imp[[j]][, i], c(1, 60))"
+post["CHILDREN"] <- "imp[[j]][, i] <- squeeze(imp[[j]][, i], c(0, 22))"
+post["X_BMI5"] <- "imp[[j]][, i] <- squeeze(imp[[j]][, i], c(1215, 9765))"
+post["SCNTWRK1"] <- "imp[[j]][, i] <- squeeze(imp[[j]][, i], c(0, 96))"
 
-brfss_data_comp <- complete(imp1)
+imp1 <- mice(brfss_data_f, method = meth_list, m=1, seed = 85444, post =post)
+
+brfss_data_comp_1 <- complete(imp1)
 save(brfss_data_comp, file = 'brfss_comp.rda')
 nehrs_data$fips <- as.factor(nehrs_data$fips)
 #when we are ready to merge both the nehrs and the BRFSS 
