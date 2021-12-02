@@ -181,7 +181,7 @@ brfss_data_f = subset(brfss_data_f, select = c('X_RFHLTH', 'fips', 'CHECKUP1CLEA
 ##############################
 
 ### (Cindy start list here)
-meth_list <- c('polr', '', 'polyreg', 'polr', 'polyreg', 'logreg')
+meth_list <- c('polr', '', '', 'polyreg', 'polr', 'polyreg', 'logreg')
 
 meth_list <- append(meth_list, c('polyreg', 'norm.nob', 'polr','norm.nob','logreg','norm.nob', 'polyreg', 'logreg', 'logreg', 'logreg', 'logreg', 'polyreg') )
 imp <- mice(brfss_data_f, method = meth_list)
