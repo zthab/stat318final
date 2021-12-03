@@ -91,7 +91,7 @@ final_hlth <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX +
                     pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                     pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                     pct_phys_integrate_summary_care_record,
-                  family=binomial(link="logit"), data = full_data)
+                  family=binomial(link="logit"), data = train)
 
 final_checkup <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
                        MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
@@ -104,15 +104,47 @@ final_checkup <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
                        pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
                        pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                        pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
-                     family=binomial(link="logit"), data = full_data)
+                     family=binomial(link="logit"), data = train)
+
+final_hlth_2 <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + 
+                    MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
+                    CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+                    SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + 
+                    INTERNET + EXERANY2 + X_SMOKER3 + pct_phys_any_ehr + 
+                    pct_phys_basic_ehr + pct_primary_care_phys_cert_ehr + 
+                    pct_surg_med_spec_phys_cert_ehr +  pct_small_practice_phys_cert_ehr + 
+                    pct_phys_patient_secure_message + pct_phys_vdt +pct_phys_vd_and_t + 
+                    pct_phys_find_clin_info + pct_phys_send_any_clin_info + 
+                    pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+                    pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+                    pct_phys_integrate_summary_care_record,
+                  family=binomial(link="cloglog"), data = train)
+
+final_checkup_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
+                       MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
+                       CHILDREN + INCOME2 + X_BMI5 + PREGNANT + SCNTWRK1 + 
+                       X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + EXERANY2 + 
+                       X_SMOKER3 + pct_phys_any_ehr + pct_phys_basic_ehr + 
+                       pct_primary_care_phys_cert_ehr + pct_surg_med_spec_phys_cert_ehr + 
+                       pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
+                       pct_phys_vdt +pct_phys_vd_and_t + pct_phys_find_clin_info + 
+                       pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
+                       pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
+                       pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
+                     family=binomial(link="cloglog"), data = train)
+
+
+##################
+# Stepwise
+##################
 
 hlth_step_aic <- step(final_hlth, direction = "both", k = 2)
 save(hlth_step_aic, file = 'data/hlth_step_aic.rda')
-hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(full_data$X_RFHLTH)))
+hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(train$X_RFHLTH)))
 save(hlth_step_bic, file = 'data/hlth_step_bic.rda')
 
 checkup_step_aic <- step(final_checkup, direction = "both", k = 2)
 save(checkup_step_aic, file = 'data/checkup_step_aic.rda')
-checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(full_data$X_RFHLTH)))
+checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(train$X_RFHLTH)))
 save(checkup_step_bic, file = 'data/checkup_step_bic.rda')
 
