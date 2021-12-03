@@ -196,11 +196,13 @@ post["SCNTWRK1"] <- "imp[[j]][, i] <- squeeze(imp[[j]][, i], c(0, 96))"
 imp1 <- mice(brfss_data_f, method = meth_list, m=1, seed = 85444, post =post)
 
 brfss_data_comp_1 <- complete(imp1)
-save(brfss_data_comp, file = 'brfss_comp.rda')
+save(brfss_data_comp_1, file = 'brfss_comp_1.rda')
+save(imp1, file = 'imp2.rda')
+
 nehrs_data$fips <- as.factor(nehrs_data$fips)
 #when we are ready to merge both the nehrs and the BRFSS 
-full_data <- left_join(brfss_data_comp, nehrs_data, by = 'fips')
-save(full_data, file='full_comp.rda')
+full_data <- left_join(brfss_data_comp_1, nehrs_data, by = 'fips')
+save(full_data, file='full_comp_1.rda')
 
 rm(brfss_data)
 rm(nehrs_data)

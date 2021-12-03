@@ -2,12 +2,17 @@ library(car)
 library(dplyr)
 load("full_comp_1.rda")
 colnames(full_data)
+set.seed(123)
 
 # creates training and testing data (divided into 2/3 and 1/3)
-set.seed(123)
 indicesTrainingSet<-sample(nrow(full_data), length(full_data$X_RFHLTH)*2/3, replace=FALSE)
 train<-full_data[indicesTrainingSet,]
 test<-full_data[-indicesTrainingSet,]
+
+
+##################
+# VIF Analysis
+##################
 
 # Included any variable with more than 5 levels
 model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL + 
@@ -100,3 +105,14 @@ final_checkup <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
                        pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                        pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
                      family=binomial(link="logit"), data = full_data)
+
+hlth_step_aic <- step(final_hlth, direction = "both", k = 2)
+save(hlth_step_aic, file = 'data/hlth_step_aic.rda')
+hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(full_data$X_RFHLTH)))
+save(hlth_step_bic, file = 'data/hlth_step_bic.rda')
+
+checkup_step_aic <- step(final_checkup, direction = "both", k = 2)
+save(checkup_step_aic, file = 'data/checkup_step_aic.rda')
+checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(full_data$X_RFHLTH)))
+save(checkup_step_bic, file = 'data/checkup_step_bic.rda')
+
