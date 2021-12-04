@@ -96,26 +96,26 @@ for(i in 1:K){
   
   #adding to performance metrics
   hlth_aic_perf <- hlth_aic_perf + (1/K)*
-    c((conf_hlth_aic[0,0]+conf_hlth_aic[1,1])/pred_n, 
-      conf_hlth_aic[1,1]/(conf_hlth_aic[1,1]+conf_hlth_aic[0,1]),
-      conf_hlth_aic[0,0]/(conf_hlth_aic[0,0]+conf_hlth_aic[1,0]),
-      conf_hlth_aic[1,1]/(conf_hlth_aic[1,1]+conf_hlth_aic[1,0]))
+    c((conf_hlth_aic[1,1]+conf_hlth_aic[2,2])/pred_n, 
+      conf_hlth_aic[2,2]/(conf_hlth_aic[2,2]+conf_hlth_aic[1,2]),
+      conf_hlth_aic[1,1]/(conf_hlth_aic[1,1]+conf_hlth_aic[2,1]),
+      conf_hlth_aic[2,2]/(conf_hlth_aic[2,2]+conf_hlth_aic[2,1]))
   
   hlth_bic_perf <- hlth_bic_perf + (1/K)*
-    c((conf_hlth_bic[0,0]+conf_hlth_bic[1,1])/pred_n, 
-      conf_hlth_bic[1,1]/(conf_hlth_bic[1,1]+conf_hlth_bic[0,1]),
-      conf_hlth_bic[0,0]/(conf_hlth_bic[0,0]+conf_hlth_bic[1,0]),
-      conf_hlth_bic[1,1]/(conf_hlth_bic[1,1]+conf_hlth_bic[1,0]))
+    c((conf_hlth_bic[1,1]+conf_hlth_bic[2,2])/pred_n, 
+      conf_hlth_bic[2,2]/(conf_hlth_bic[2,2]+conf_hlth_bic[1,2]),
+      conf_hlth_bic[1,1]/(conf_hlth_bic[1,1]+conf_hlth_bic[2,1]),
+      conf_hlth_bic[2,2]/(conf_hlth_bic[2,2]+conf_hlth_bic[2,1]))
   
   checkup_aic_perf <- checkup_aic_perf + (1/K)*
-    c((conf_checkup_aic[0,0]+conf_checkup_aic[1,1])/pred_n, 
-      conf_checkup_aic[1,1]/(conf_checkup_aic[1,1]+conf_checkup_aic[0,1]),
-      conf_checkup_aic[0,0]/(conf_checkup_aic[0,0]+conf_checkup_aic[1,0]),
-      conf_checkup_aic[1,1]/(conf_checkup_aic[1,1]+conf_checkup_aic[1,0]))
+    c((conf_checkup_aic[1,1]+conf_checkup_aic[2,2])/pred_n, 
+      conf_checkup_aic[2,2]/(conf_checkup_aic[2,2]+conf_checkup_aic[1,2]),
+      conf_checkup_aic[1,1]/(conf_checkup_aic[1,1]+conf_checkup_aic[2,1]),
+      conf_checkup_aic[2,2]/(conf_checkup_aic[2,2]+conf_checkup_aic[2,1]))
   
   checkup_bic_perf <- checkup_bic_perf + (1/K)*
-    c((conf_checkup_bic[0,0]+conf_checkup_bic[1,1])/pred_n, 
-      conf_checkup_bic[1,1]/(conf_checkup_bic[1,1]+conf_checkup_bic[0,1]),
-      conf_checkup_bic[0,0]/(conf_checkup_bic[0,0]+conf_checkup_bic[1,0]),
-      conf_checkup_bic[1,1]/(conf_checkup_bic[1,1]+conf_checkup_bic[1,0]))
+    c((conf_checkup_bic[1,1]+conf_checkup_bic[2,2])/pred_n, 
+      conf_checkup_bic[2,2]/(conf_checkup_bic[2,2]+conf_checkup_bic[1,2]),
+      conf_checkup_bic[1,1]/(conf_checkup_bic[1,1]+conf_checkup_bic[2,1]),
+      conf_checkup_bic[2,2]/(conf_checkup_bic[2,2]+conf_checkup_bic[2,1]))
 }
