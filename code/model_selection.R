@@ -25,7 +25,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                      pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                      pct_phys_integrate_summary_care_record,
-                   family=binomial(link="logit"), data = train)
+                   family=binomial(link="logit"), data = full_data)
 vif(model.logit) # pct_phys_cert_ehr highest
 model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL + 
                      EDUCA + EMPLOY1 + CHILDREN + INCOME2 + 
@@ -38,7 +38,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                      pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                      pct_phys_integrate_summary_care_record,
-                   family=binomial(link="logit"), data = train)
+                   family=binomial(link="logit"), data = full_data)
 vif(model.logit) # ct_phys_send_receive_any_patient_info highest
 model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL + 
                      EDUCA + EMPLOY1 + CHILDREN + INCOME2 + 
@@ -50,7 +50,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
                      pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                      pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
-                   family=binomial(link="logit"), data = train)
+                   family=binomial(link="logit"), data = full_data)
 vif(model.logit) # EMPLOY1 highest
 model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL + 
                      EDUCA + CHILDREN + INCOME2 + X_BMI5 + 
@@ -62,7 +62,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
                      pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                      pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
-                   family=binomial(link="logit"), data = train)
+                   family=binomial(link="logit"), data = full_data)
 vif(model.logit) # pct_phys_e_share_patients highest
 model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL + 
                      EDUCA + CHILDREN + INCOME2 + X_BMI5 + 
@@ -74,7 +74,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                      pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                      pct_phys_integrate_summary_care_record,
-                   family=binomial(link="logit"), data = train)
+                   family=binomial(link="logit"), data = full_data)
 vif(model.logit) # none other are higher than 8 (next highest is pct_phys_receive_summary_care_record at 7.7)
 
 # final full models
@@ -90,7 +90,7 @@ final_hlth <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX +
                     pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                     pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                     pct_phys_integrate_summary_care_record,
-                  family=binomial(link="logit"), data = train)
+                  family=binomial(link="logit"), data = full_data)
 
 final_checkup <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
                        MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
@@ -103,7 +103,7 @@ final_checkup <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
                        pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
                        pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                        pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
-                     family=binomial(link="logit"), data = train)
+                     family=binomial(link="logit"), data = full_data)
 
 final_hlth_2 <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + 
                     MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
@@ -117,7 +117,7 @@ final_hlth_2 <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX +
                     pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
                     pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
                     pct_phys_integrate_summary_care_record,
-                  family=binomial(link="cloglog"), data = train)
+                  family=binomial(link="cloglog"), data = full_data)
 
 final_checkup_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
                        MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
@@ -130,7 +130,7 @@ final_checkup_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
                        pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
                        pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
                        pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record,
-                     family=binomial(link="cloglog"), data = train)
+                     family=binomial(link="cloglog"), data = full_data)
 
 
 ##################
@@ -139,14 +139,23 @@ final_checkup_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
 
 hlth_step_aic <- step(final_hlth, direction = "both", k = 2)
 save(hlth_step_aic, file = 'data/hlth_step_aic.rda')
-hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(train$X_RFHLTH)))
+hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(full_model$X_RFHLTH)))
 save(hlth_step_bic, file = 'data/hlth_step_bic.rda')
 
 checkup_step_aic <- step(final_checkup, direction = "both", k = 2)
 save(checkup_step_aic, file = 'data/checkup_step_aic.rda')
-checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(train$X_RFHLTH)))
+checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(full_model$X_RFHLTH)))
 save(checkup_step_bic, file = 'data/checkup_step_bic.rda')
 
+hlth_step_aic_2 <- step(final_hlth_2, direction = "both", k = 2)
+save(hlth_step_aic, file = 'data/hlth_step_aic.rda')
+hlth_step_bic <- step(final_hlth, direction = "both", k = log(length(full_model$X_RFHLTH)))
+save(hlth_step_bic, file = 'data/hlth_step_bic.rda')
+
+checkup_step_aic_2 <- step(final_checkup_2, direction = "both", k = 2)
+save(checkup_step_aic, file = 'data/checkup_step_aic.rda')
+checkup_step_bic <- step(final_checkup, direction = "both", k = log(length(full_model$X_RFHLTH)))
+save(checkup_step_bic, file = 'data/checkup_step_bic.rda')
 
 
 hlth_aic_model<- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
