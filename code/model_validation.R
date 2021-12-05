@@ -185,3 +185,74 @@ plot(auc_4$perf, col="black", lty=3, main=paste0("Checkup BIC - 5-fold CV AUC"))
 plot(auc_4$perf, col="blue", lty=1, avg="vertical", add=TRUE)
 text(0.8,0.2, paste("mean AUC:", format(round(auc_4$cvAUC, 4), nsmall=4)))
 text(0.8,0.1, paste("AUC:", format(round(min(auc_4$fold.AUC), 4), nsmall=4), "-", format(round(max(auc_4$fold.AUC), 4), nsmall=4)))
+
+# Likelihood Ratio Test
+full <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + 
+              MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
+              CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+              SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + 
+              INTERNET + EXERANY2 + X_SMOKER3 + pct_phys_any_ehr + 
+              pct_phys_basic_ehr + pct_primary_care_phys_cert_ehr + 
+              pct_surg_med_spec_phys_cert_ehr +  pct_small_practice_phys_cert_ehr + 
+              pct_phys_patient_secure_message + pct_phys_vdt +pct_phys_vd_and_t + 
+              pct_phys_find_clin_info + pct_phys_send_any_clin_info + 
+              pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+              pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+              pct_phys_integrate_summary_care_record,
+            family=binomial(link="logit"), data = full_data)
+full_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
+              MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
+              CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+              SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + 
+              INTERNET + EXERANY2 + X_SMOKER3 + pct_phys_any_ehr + 
+              pct_phys_basic_ehr + pct_primary_care_phys_cert_ehr + 
+              pct_surg_med_spec_phys_cert_ehr +  pct_small_practice_phys_cert_ehr + 
+              pct_phys_patient_secure_message + pct_phys_vdt +pct_phys_vd_and_t + 
+              pct_phys_find_clin_info + pct_phys_send_any_clin_info + 
+              pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+              pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+              pct_phys_integrate_summary_care_record,
+            family=binomial(link="logit"), data = full_data)
+base <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
+                      EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
+                      PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
+                      EXERANY2 + X_SMOKER3 + pct_phys_any_ehr + pct_phys_basic_ehr + 
+                      pct_primary_care_phys_cert_ehr + pct_surg_med_spec_phys_cert_ehr + 
+                      pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
+                      pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
+                      pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
+                      pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record, 
+                    family = binomial(link = "logit"), data = full_data)
+base_2 <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
+                      EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
+                      PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
+                      EXERANY2 + X_SMOKER3 + pct_surg_med_spec_phys_cert_ehr + 
+                      pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
+                      pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+                      pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+                      pct_phys_integrate_summary_care_record, family = binomial(link = "logit"), data = full_data)
+base_3 <- glm(formula = CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
+                EDUCA + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+                SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + EXERANY2 + 
+                X_SMOKER3 + pct_phys_any_ehr + pct_phys_basic_ehr + pct_primary_care_phys_cert_ehr + 
+                pct_surg_med_spec_phys_cert_ehr + pct_small_practice_phys_cert_ehr + 
+                pct_phys_patient_secure_message + pct_phys_vdt + pct_phys_vd_and_t + 
+                pct_phys_find_clin_info + pct_phys_send_any_clin_info + pct_phys_receive_any_clin_info + 
+                pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+                pct_phys_integrate_summary_care_record, family = binomial(link = "logit"), data = full_data)
+
+base_4 <- glm(formula = CHECKUP1CLEAN ~ PVTRESD1 + SEX + MARITAL + VETERAN3 + 
+                CHILDREN + INCOME2 + X_BMI5 + PREGNANT + SCNTWRK1 + X_PRACE1 + 
+                X_HISPANC + HLTHPLN1 + INTERNET + EXERANY2 + X_SMOKER3 + 
+                pct_phys_any_ehr + pct_phys_basic_ehr + pct_primary_care_phys_cert_ehr + 
+                pct_surg_med_spec_phys_cert_ehr + pct_phys_patient_secure_message + 
+                pct_phys_vdt + pct_phys_find_clin_info + pct_phys_send_any_clin_info + 
+                pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
+                pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record, 
+              family = binomial(link = "logit"), data = full_data)
+
+library(lmtest)
+lrtest(base, full) #0.2496 (Health AIC)
+lrtest(base_2, full) #0.0001622 (Health BIC)
+lrtest(base_3, full_2) #.2848 (Checkup AIC)
+lrtest(base_4, full_2) #8.183e-05 (Checkup BIC)
