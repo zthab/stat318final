@@ -1,5 +1,7 @@
 library(dplyr)
 library(car)
+library("pROC")
+library(cvAUC)
 ##########################################
 #Model validation with 5 fold cross validation 
 ##########################################
@@ -24,6 +26,15 @@ hlth_aic_perf <- c(0,0,0,0)
 hlth_bic_perf <- c(0,0,0,0)
 checkup_aic_perf <- c(0,0,0,0)
 checkup_bic_perf <- c(0,0,0,0)
+hlth_aic_preds <- vector("list", length = K) 
+hlth_aic_actuals <- vector("list", length = K)
+hlth_bic_preds <- vector("list", length = K) 
+hlth_bic_actuals <- vector("list", length = K)
+checkup_aic_preds <- vector("list", length = K) 
+checkup_aic_actuals <- vector("list", length = K)
+checkup_bic_preds <- vector("list", length = K) 
+checkup_bic_actuals <- vector("list", length = K)
+
 for(i in 1:K){
   
   hlth_aic_fold<- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
@@ -76,14 +87,43 @@ for(i in 1:K){
   hlth_aic_pi_hat <- predict.glm(hlth_aic_fold, newdata  = pred_data)
   hlth_aic_y_hat <- ifelse(hlth_aic_pi_hat>0.5,2,1)
   
+  hlth_aic_preds[[i]] <- hlth_aic_pi_hat
+  y <- as.character(pred_data$X_RFHLTH)
+  y[y=="good"] = 1
+  y[y=="bad"] = 2
+  y <- as.integer(y)
+  hlth_aic_actuals[[i]] <- y
+  
   hlth_bic_pi_hat <- predict.glm(hlth_bic_fold, newdata = pred_data)
   hlth_bic_y_hat <- ifelse(hlth_bic_pi_hat>0.5,2,1)
+  
+  hlth_bic_preds[[i]] <- hlth_bic_pi_hat
+  y <- as.character(pred_data$X_RFHLTH)
+  y[y=="good"] = 1
+  y[y=="bad"] = 2
+  y <- as.integer(y)
+  hlth_bic_actuals[[i]] <- y
   
   checkup_aic_pi_hat <- predict.glm(checkup_aic_fold, newdata = pred_data)
   checkup_aic_y_hat <- ifelse(checkup_aic_pi_hat>0.5,1,0)
   
-  checkup_bic_model_pred <- predict(checkup_bic_fold, newdata = pred_data)
-  checkup_bic_y_hat <- ifelse(checkup_bic_model_pred>0.5,1,0)
+  checkup_aic_preds[[i]] <- checkup_aic_pi_hat
+  y <- as.character(pred_data$CHECKUP1CLEAN)
+  y[y=="good"] = 1
+  y[y=="bad"] = 0
+  y <- as.integer(y)
+  checkup_aic_actuals[[i]] <- y
+  
+  checkup_bic_pi_hat <- predict.glm(checkup_bic_fold, newdata = pred_data)
+  checkup_bic_y_hat <- ifelse(checkup_bic_pi_hat>0.5,1,0)
+  
+  checkup_bic_preds[[i]] <- checkup_bic_pi_hat
+  y <- as.character(pred_data$CHECKUP1CLEAN)
+  y[y=="good"] = 1
+  y[y=="bad"] = 0
+  y <- as.integer(y)
+  checkup_bic_actuals[[i]] <- y
+  
   ###############################
   # do model testing below 
   ###############################
@@ -119,3 +159,29 @@ for(i in 1:K){
       conf_checkup_bic[1,1]/(conf_checkup_bic[1,1]+conf_checkup_bic[2,1]),
       conf_checkup_bic[2,2]/(conf_checkup_bic[2,2]+conf_checkup_bic[2,1]))
 }
+
+# AUC values and graphs
+par(mfrow=c(2,2))
+auc_1 <- cvAUC(hlth_aic_preds, hlth_aic_actuals)
+plot(auc_1$perf, col="black", lty=3, main=paste0("Health AIC - 5-fold CV AUC"))
+plot(auc_1$perf, col="blue", lty=1, avg="vertical", add=TRUE)
+text(0.8,0.2, paste("mean AUC:", format(round(auc_1$cvAUC, 4), nsmall=4)))
+text(0.8,0.1, paste("AUC:", format(round(min(auc_1$fold.AUC), 4), nsmall=4), "-", format(round(max(auc_1$fold.AUC), 4), nsmall=4)))
+
+auc_2 <- cvAUC(hlth_bic_preds, hlth_bic_actuals)
+plot(auc_2$perf, col="black", lty=3, main=paste0("Health BIC - 5-fold CV AUC"))
+plot(auc_2$perf, col="blue", lty=1, avg="vertical", add=TRUE)
+text(0.8,0.2, paste("mean AUC:", format(round(auc_2$cvAUC, 4), nsmall=4)))
+text(0.8,0.1, paste("AUC:", format(round(min(auc_2$fold.AUC), 4), nsmall=4), "-", format(round(max(auc_2$fold.AUC), 4), nsmall=4)))
+
+auc_3 <- cvAUC(checkup_aic_preds, checkup_aic_actuals)
+plot(auc_3$perf, col="black", lty=3, main=paste0("Checkup AIC - 5-fold CV AUC"))
+plot(auc_3$perf, col="blue", lty=1, avg="vertical", add=TRUE)
+text(0.8,0.2, paste("mean AUC:", format(round(auc_3$cvAUC, 4), nsmall=4)))
+text(0.8,0.1, paste("AUC:", format(round(min(auc_3$fold.AUC), 4), nsmall=4), "-", format(round(max(auc_3$fold.AUC), 4), nsmall=4)))
+
+auc_4 <- cvAUC(checkup_bic_preds, checkup_bic_actuals)
+plot(auc_4$perf, col="black", lty=3, main=paste0("Checkup BIC - 5-fold CV AUC"))
+plot(auc_4$perf, col="blue", lty=1, avg="vertical", add=TRUE)
+text(0.8,0.2, paste("mean AUC:", format(round(auc_4$cvAUC, 4), nsmall=4)))
+text(0.8,0.1, paste("AUC:", format(round(min(auc_4$fold.AUC), 4), nsmall=4), "-", format(round(max(auc_4$fold.AUC), 4), nsmall=4)))
