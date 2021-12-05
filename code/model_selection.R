@@ -76,6 +76,7 @@ model.logit <- glm(X_RFHLTH~NUMADULT + MARITAL +
                      pct_phys_integrate_summary_care_record,
                    family=binomial(link="logit"), data = full_data)
 vif(model.logit) # none other are higher than 8 (next highest is pct_phys_receive_summary_care_record at 7.7)
+# Same was true for CHECKUP1CLEAN
 
 # final full models
 final_hlth <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + 
