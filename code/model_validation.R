@@ -276,10 +276,13 @@ hlth_bic_model <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL +
 plot(hlth_bic_model)
 
 # Delta Deviance Plot
-blr_plot_diag_difdev(
+deldev <- blr_plot_diag_difdev(
   hlth_bic_model,
   point_color = "blue",
   title = "Delta Deviance Plot",
   xaxis_title = "ID",
   yaxis_title = "Delta Deviance"
 )
+# Influencial outlier detection and removal
+outlier_id <- deldev$data$x[deldev$data$y > 7.5]
+full_data <- full_data[-outlier_id,]
