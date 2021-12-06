@@ -37,26 +37,24 @@ checkup_bic_actuals <- vector("list", length = K)
 
 for(i in 1:K){
   
-  hlth_aic_fold<- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
-                              EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
-                              PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
-                              EXERANY2 + X_SMOKER3 + pct_phys_any_ehr + pct_phys_basic_ehr + 
-                              pct_primary_care_phys_cert_ehr + pct_surg_med_spec_phys_cert_ehr + 
-                              pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
-                              pct_phys_send_any_clin_info + pct_phys_send_summary_care_record + 
-                              pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
-                              pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record, 
-                            family = binomial(link = "logit"), data = full_data[-index.fold[[i]],])
+  hlth_aic_fold<- glm(formula = X_RFHLTH ~ NUMADULT + SEX + MARITAL + EDUCA + RENTHOM1 + 
+                        VETERAN3 + EMPLOY1 + CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+                        SCNTWRK1 + X_PRACE1 + X_HISPANC + INTERNET + EXERANY2 + X_SMOKER3 + 
+                        pct_phys_any_ehr + pct_primary_care_phys_cert_ehr + pct_surg_med_spec_phys_cert_ehr + 
+                        pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
+                        pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+                        pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+                        pct_phys_integrate_summary_care_record, family = binomial(link = "logit"), 
+                        data = full_data[-index.fold[[i]],])
   
-  hlth_bic_fold <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
-                               EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
-                               PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
-                               EXERANY2 + X_SMOKER3 + pct_surg_med_spec_phys_cert_ehr + 
-                               pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
-                               pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
-                               pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
-                               pct_phys_integrate_summary_care_record, family = binomial(link = "logit"), 
-                             data = full_data[-index.fold[[i]],])
+  hlth_bic_fold <- glm(formula = X_RFHLTH ~ NUMADULT + MARITAL + EDUCA + RENTHOM1 + 
+                         VETERAN3 + EMPLOY1 + CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
+                         SCNTWRK1 + X_HISPANC + INTERNET + EXERANY2 + X_SMOKER3 + 
+                         pct_primary_care_phys_cert_ehr + pct_surg_med_spec_phys_cert_ehr + 
+                         pct_small_practice_phys_cert_ehr + pct_phys_send_summary_care_record + 
+                         pct_phys_receive_any_clin_info + pct_phys_receive_summary_care_record + 
+                         pct_phys_integrate_any_clin_info + pct_phys_integrate_summary_care_record, 
+                       family = binomial(link = "logit"), data = full_data[-index.fold[[i]],])
   
   checkup_aic_fold <- glm(formula = CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
                                   EDUCA + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
