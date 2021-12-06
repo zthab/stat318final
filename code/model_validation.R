@@ -2,6 +2,7 @@ library(dplyr)
 library(car)
 library("pROC")
 library(cvAUC)
+library(blorr)
 ##########################################
 #Model validation with 5 fold cross validation 
 ##########################################
@@ -274,3 +275,11 @@ hlth_bic_model <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL +
                      data = full_data)
 plot(hlth_bic_model)
 
+# Delta Deviance Plot
+blr_plot_diag_difdev(
+  hlth_bic_model,
+  point_color = "blue",
+  title = "Delta Deviance Plot",
+  xaxis_title = "ID",
+  yaxis_title = "Delta Deviance"
+)
