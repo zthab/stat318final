@@ -200,6 +200,7 @@ full <- glm(X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX +
               pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
               pct_phys_integrate_summary_care_record,
             family=binomial(link="logit"), data = full_data)
+
 full_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX + 
               MARITAL + EDUCA + RENTHOM1 + VETERAN3 + 
               CHILDREN + INCOME2 + X_BMI5 + PREGNANT + 
@@ -213,6 +214,7 @@ full_2 <- glm(CHECKUP1CLEAN ~ NUMADULT + PVTRESD1 + SEX +
               pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
               pct_phys_integrate_summary_care_record,
             family=binomial(link="logit"), data = full_data)
+
 base <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
                       EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
                       PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
@@ -256,3 +258,21 @@ lrtest(base, full) #0.2496 (Health AIC)
 lrtest(base_2, full) #0.0001622 (Health BIC)
 lrtest(base_3, full_2) #.2848 (Checkup AIC)
 lrtest(base_4, full_2) #8.183e-05 (Checkup BIC)
+
+
+
+
+#######
+#Residiual Analysis
+#####
+hlth_bic_model <- glm(formula = X_RFHLTH ~ NUMADULT + PVTRESD1 + SEX + MARITAL + 
+                       EDUCA + RENTHOM1 + VETERAN3 + CHILDREN + INCOME2 + X_BMI5 + 
+                       PREGNANT + SCNTWRK1 + X_PRACE1 + X_HISPANC + HLTHPLN1 + INTERNET + 
+                       EXERANY2 + X_SMOKER3 + pct_surg_med_spec_phys_cert_ehr + 
+                       pct_small_practice_phys_cert_ehr + pct_phys_patient_secure_message + 
+                       pct_phys_send_summary_care_record + pct_phys_receive_any_clin_info + 
+                       pct_phys_receive_summary_care_record + pct_phys_integrate_any_clin_info + 
+                       pct_phys_integrate_summary_care_record, family = binomial(link = "logit"), 
+                     data = full_data)
+plot(hlth_bic_model)
+

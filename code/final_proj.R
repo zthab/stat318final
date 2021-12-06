@@ -17,7 +17,7 @@ fips_data <- read.csv(here::here('data', 'us-state-ansi-fips.csv'),
 nehrs_data <- nehrs_data %>% filter(period == 2015 & region != 'National',) %>% 
   left_join(fips_data, by = c('region', 'region_code'))
 nehrs_data <- nehrs_data[,colSums(is.na(nehrs_data))<nrow(nehrs_data)]
-nehrs_data <- select(nehrs_data, -region, -region_code, -period)
+nehrs_data <- dplyr::select(nehrs_data, -region, -region_code, -period)
 rm(fips_data)
 
 #excluding Guam, Puerto Rico from BRFSS data since 
@@ -39,6 +39,7 @@ brfss_data <- filter(brfss_data, is.na(CSTATE) | CSTATE !=2)
 
 #excluding observations that do not have _RFHLTH
 brfss_data <- filter(brfss_data, X_RFHLTH != 9)
+brfss_data_comp_1$X_RFHLTH[brfss_data_comp_1$X_RFHLTH == 2]
 brfss_data$X_RFHLTH <- as.factor(brfss_data$X_RFHLTH)
 
 #creates new predictor variable for checkup1
