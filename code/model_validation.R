@@ -290,10 +290,14 @@ hlth_bic_model <- glm(formula = X_RFHLTH ~ NUMADULT + MARITAL + EDUCA + RENTHOM1
 
 plot(hlth_bic_model)
 
+color <- rep(NA, nrow(full_data))
+color[full_data$X_RFHLTH == 1] <- "purple"
+color[full_data$X_RFHLTH == 0] <- "pink"
+
 # Delta Deviance Plot
 deldev <- blr_plot_diag_difdev(
   hlth_bic_model,
-  point_color = "blue",
+  point_color = color,
   title = "Delta Deviance Plot",
   xaxis_title = "ID",
   yaxis_title = "Delta Deviance"
