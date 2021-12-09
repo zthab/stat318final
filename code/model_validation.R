@@ -314,11 +314,3 @@ deldev <- blr_plot_diag_difdev(
   xaxis_title = "ID",
   yaxis_title = "Delta Deviance"
 )
-<<<<<<< HEAD
-=======
-# Influencial outlier detection and removal
-outlier_id <- deldev$data$x[deldev$data$y > 7.5]
-full_data_no_outly <- full_data[-outlier_id,]
-save(full_data_no_outly, file =
-       'no_out.rda')
->>>>>>> origin/master
