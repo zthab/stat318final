@@ -6,7 +6,7 @@ library(mice)
 brfss_data <- read.csv(here::here('data','2015.csv') )
 nehrs_data <- read.csv(here::here('data', 'NEHRS_2008-2017.csv'))
 fips_data  <- read.csv(here::here('data', 'us-state-ansi-fips.csv'),
-                      stringsAsFactors = F)
+                       stringsAsFactors = F)
 
 
 ##############################
@@ -26,12 +26,12 @@ rm(fips_data)
 #excluding Guam, Puerto Rico, and blank statses 
 #from BRFSS data since they aren't in NEHRS data 
 brfss_data <- brfss_data %>% rename(fips = X_STATE) %>% filter((fips != 66 & 
-                                                        fips != 72)|is.na(fips)) 
+                                                                  fips != 72)|is.na(fips)) 
 brfss_data$fips <- as.factor(brfss_data$fips)
 #excluding survey observations not made in 2015
 brfss_data <- brfss_data %>% mutate(IYEAR = str_extract(as.character(.$IYEAR), 
                                                         '[0-9]{4}')) %>% 
-              filter(IYEAR == '2015') 
+  filter(IYEAR == '2015') 
 #excluding observations for which survey was terminated early
 brfss_data <- filter(brfss_data, !((!is.na(CELLFON3)& CELLFON3 == 2)| 
                                      (!is.na(CELLFON2) & CELLFON2 == 2)))
@@ -39,7 +39,7 @@ brfss_data <- filter(brfss_data, !((!is.na(CELLFON3)& CELLFON3 == 2)|
 brfss_data <- filter(brfss_data, is.na(CSTATE) | CSTATE !=2)
 #excluding observations that do not have _RFHLTH (our response variable)
 brfss_data <- filter(brfss_data, X_RFHLTH != 9)
-brfss_data_comp_1$X_RFHLTH[brfss_data_comp_1$X_RFHLTH == 2] <- 0
+brfss_data$X_RFHLTH[brfss_data$X_RFHLTH == 2] <- 0
 brfss_data$X_RFHLTH <- as.factor(brfss_data$X_RFHLTH)
 
 #creates new predictor variable for checkup1
